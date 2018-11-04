@@ -1,0 +1,38 @@
+{
+  "name": "send-it-test-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "clean": "rm -rf build",
+    "clean-routes": "cd build && rm -rf routes",
+    "clean-test": "cd build && rm -rf test",
+    "build-test": "npm run clean-test && cd build && mkdir test && babel .././test/test.js",
+    "build": "npm run clean && mkdir build && babel src/app.js database/databaseConfig.js controllers/databaseController.js -d build && npm run build-routes && npm run build-test",
+    "build-routes": "npm run clean-routes && cd build && mkdir routes && babel .././routes/route.js -d routes",
+    "test": "mocha entry/index.js --exit",
+    "start": "npm run build && nodemon entry/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "eslint": "^5.8.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "mocha": "^5.2.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.5"
+  }
+}
