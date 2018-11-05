@@ -12,8 +12,11 @@ router.post('/', parcelController.createNewParcel)
 // this is the route to get a specific parcel
 // GET A SPECIFIC PARCEL
 router.get('/:id', parcelController.getSpecificParcel)
+// this is to update the status of an existing parcel order
+// PUT A STATUS UPDATE
+router.put('/:id', parcelController.updateParcelStatus)
 // this is to delete a specific parcel
 // DELETE A SPECIFIC ROUTE
-router.get('/delete/:id', parcelController.deleteSpecificParcel)
+router.delete('/:id', parcelController.deleteSpecificParcel)
 
 export default router;

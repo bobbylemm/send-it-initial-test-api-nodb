@@ -10,6 +10,21 @@ app.use(morgan("dev"));
 const PORT = process.env.port || 4000;
 
 app.use('/parcels', routes);
+// catching an error before passing it to the erro handler
+app.use((req, res, next) => {
+    let err = new Error('this page was not found');
+    err.status = 404;
+    next(err);
+})
+// error handler
+app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    res.json({
+        error: {
+            message: err.message
+        }
+    })
+})
 
 app.listen(PORT, () => {
     console.log(`Express app running on port ${PORT}`)

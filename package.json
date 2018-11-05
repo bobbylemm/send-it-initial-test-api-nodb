@@ -7,10 +7,10 @@
     "clean": "rm -rf build",
     "clean-routes": "cd build && rm -rf routes",
     "clean-test": "cd build && rm -rf test",
-    "build-test": "npm run clean-test && cd build && mkdir test && babel .././test/test.js",
+    "build-test": "npm run clean-test && cd build && mkdir test && babel .././test/test.test.js",
     "build": "npm run clean && mkdir build && babel src/app.js database/databaseConfig.js controllers/databaseController.js -d build && npm run build-routes && npm run build-test",
     "build-routes": "npm run clean-routes && cd build && mkdir routes && babel .././routes/route.js -d routes",
-    "test": "mocha entry/index.js --exit",
+    "test": "mocha test/test.test.js --compilers js:babel-register --exit",
     "start": "npm run build && nodemon entry/index.js"
   },
   "keywords": [],

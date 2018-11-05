@@ -28,8 +28,11 @@ router.post('/', _databaseController2.default.createNewParcel);
 // this is the route to get a specific parcel
 // GET A SPECIFIC PARCEL
 router.get('/:id', _databaseController2.default.getSpecificParcel);
+// this is to update the status of an existing parcel order
+// PUT A STATUS UPDATE
+
 // this is to delete a specific parcel
 // DELETE A SPECIFIC ROUTE
-router.get('/delete/:id', _databaseController2.default.deleteSpecificParcel);
+router.delete('/delete/:id', _databaseController2.default.deleteSpecificParcel);
 
 exports.default = router;

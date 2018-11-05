@@ -29,6 +29,21 @@ app.use((0, _morgan2.default)("dev"));
 var PORT = process.env.port || 4000;
 
 app.use('/parcels', _route2.default);
+// catching an error before passing it to the erro handler
+app.use(function (req, res, next) {
+    var err = new Error('this page was not found');
+    err.status = 404;
+    next(err);
+});
+// error handler
+app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.json({
+        error: {
+            message: err.message
+        }
+    });
+});
 
 app.listen(PORT, function () {
     console.log('Express app running on port ' + PORT);
