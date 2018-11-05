@@ -10,8 +10,8 @@
     "build-test": "npm run clean-test && cd build && mkdir test && babel .././test/test.test.js",
     "build": "npm run clean && mkdir build && babel src/app.js database/databaseConfig.js controllers/databaseController.js -d build && npm run build-routes && npm run build-test",
     "build-routes": "npm run clean-routes && cd build && mkdir routes && babel .././routes/route.js -d routes",
-    "test": "nyc --compilers js:babel-register mocha test/test.test.js --exit ",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "test": "nyc --require babel-core/register mocha test/test.test.js --exit",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "start": "npm run build && nodemon entry/index.js"
   },
   "keywords": [],
