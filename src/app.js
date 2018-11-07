@@ -4,12 +4,12 @@ import routes from '../routes/route';
 import morgan from 'morgan';
 
 const app = express();
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 const PORT = process.env.port || 4000;
 
-app.use('/parcels', routes);
+app.use('/api/v1/', routes);
 // catching an error before passing it to the erro handler
 app.use((req, res, next) => {
     let err = new Error('this page was not found');

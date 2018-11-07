@@ -4,15 +4,16 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "clean": "rm -rf build",
-    "clean-routes": "cd build && rm -rf routes",
-    "clean-test": "cd build && rm -rf test",
-    "build-test": "npm run clean-test && cd build && mkdir test && babel .././test/test.test.js",
-    "build": "npm run clean && mkdir build && babel src/app.js database/databaseConfig.js controllers/databaseController.js -d build && npm run build-routes && npm run build-test",
-    "build-routes": "npm run clean-routes && cd build && mkdir routes && babel .././routes/route.js -d routes",
+    "clean": "rm -rf dist",
+    "clean-routes": "cd dist && rm -rf routes",
+    "clean-test": "cd dist && rm -rf test",
+    "build-test": "npm run clean-test && cd dist && mkdir test && babel .././test/**.test.js -s -d test",
+    "build": "npm run clean && mkdir dist && babel src/app.js database/**.js controllers/**.js helpers/**.js -s -d dist && npm run build-routes && npm run build-test",
+    "build-routes": "npm run clean-routes && cd dist && mkdir routes && babel .././routes/route.js -s -d routes",
     "test": "nyc --require babel-core/register mocha test/test.test.js --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "start": "npm run build && nodemon entry/index.js"
+    "start": "nodemon bin/dev",
+    "production": "npm run build && nodemon bin/production"
   },
   "keywords": [],
   "author": "",

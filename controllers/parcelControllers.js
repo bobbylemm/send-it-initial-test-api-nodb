@@ -1,4 +1,6 @@
-import allParcels from '../database/databaseConfig';
+import allParcels from '../database/parceldb';
+import allUsers from '../database/usersdb';
+import helper from '../helpers/findUsers';
 
 class parcelController {
     // this is to get all parcels
@@ -18,9 +20,12 @@ class parcelController {
             packageName,
             destination,
             pickupLocation,
-            price
+            price,
+            status: ""
         };
-        if (newParcel) {
+        const currentUser = helper.findUsers(allUsers, 'loggedIn', true);
+        if (currentUser && newParcel) {
+            currentUser.parcels.push(newParcel);
             allParcels.push(newParcel)
             return res.status(200).json({
                 message: "new parcel created"
@@ -35,9 +40,7 @@ class parcelController {
     // this is to get a specific parcel
     static getSpecificParcel (req, res) {
         let parcelId = req.params.id;
-        const findParcel = allParcels.find(parcel => {
-            return parcel.id == parcelId
-        })
+        const findParcel = helper.findUsers(allParcels, 'id', parcelId);
         if (findParcel) {
             return res.status(200).json({
                 message: "the parcel was found",
@@ -52,9 +55,7 @@ class parcelController {
     // this is to update a parcel order status
     static updateParcelStatus (req, res) {
         let parcelId = req.params.id;
-        const findParcel = allParcels.find(parcel => {
-            return parcel.id == parcelId;
-        })
+        const findParcel = helper.findUsers(allParcels, 'id', parcelId);
         if (findParcel) {
             const newStatus = req.body.newStatus;
             res.status(200).json({
@@ -71,9 +72,7 @@ class parcelController {
     // this is to delete a specific parcel
     static deleteSpecificParcel (req, res) {
         let parcelId = req.params.id;
-        const findParcel = allParcels.find(parcel => {
-            return parcel.id == parcelId;
-        })
+        const findParcel = helper.findUsers(allParcels, 'id', parcelId);
         if (findParcel) {
             const allCurrentParcels = allParcels.filter(parcel => {
                 return parcel !== findParcel

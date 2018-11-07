@@ -28,7 +28,7 @@ app.use(_bodyParser2.default.json());
 app.use((0, _morgan2.default)("dev"));
 var PORT = process.env.port || 4000;
 
-app.use('/parcels', _route2.default);
+app.use('/api/v1/', _route2.default);
 // catching an error before passing it to the erro handler
 app.use(function (req, res, next) {
     var err = new Error('this page was not found');
@@ -49,3 +49,4 @@ app.listen(PORT, function () {
     console.log('Express app running on port ' + PORT);
 });
 exports.default = app;
+//# sourceMappingURL=app.js.map

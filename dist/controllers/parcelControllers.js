@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6,9 +6,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _databaseConfig = require("../database/databaseConfig");
+var _parceldb = require('../database/parceldb');
 
-var _databaseConfig2 = _interopRequireDefault(_databaseConfig);
+var _parceldb2 = _interopRequireDefault(_parceldb);
+
+var _usersdb = require('../database/usersdb');
+
+var _usersdb2 = _interopRequireDefault(_usersdb);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20,22 +24,22 @@ var parcelController = function () {
     }
 
     _createClass(parcelController, null, [{
-        key: "getAllParcels",
+        key: 'getAllParcels',
 
         // this is to get all parcels
         value: function getAllParcels(req, res) {
             return res.json({
                 response: "you have sent me a get request to get all questions",
-                parcels: _databaseConfig2.default
+                parcels: _parceldb2.default
             });
         }
 
         // this is to post a particular question
 
     }, {
-        key: "createNewParcel",
+        key: 'createNewParcel',
         value: function createNewParcel(req, res) {
-            var newId = _databaseConfig2.default[_databaseConfig2.default.length - 1].id + 1;
+            var newId = _parceldb2.default[_parceldb2.default.length - 1].id + 1;
             var packageName = req.body.packageName,
                 destination = req.body.destination,
                 pickupLocation = req.body.pickupLocation,
@@ -47,8 +51,12 @@ var parcelController = function () {
                 pickupLocation: pickupLocation,
                 price: price
             };
-            if (newParcel) {
-                _databaseConfig2.default.push(newParcel);
+            var currentUser = _usersdb2.default.find(function (user) {
+                return user.loggedIn == true;
+            });
+            if (currentUser && newParcel) {
+                currentUser.parcels.push(newParcel);
+                _parceldb2.default.push(newParcel);
                 return res.status(200).json({
                     message: "new parcel created"
                 });
@@ -62,10 +70,10 @@ var parcelController = function () {
         // this is to get a specific parcel
 
     }, {
-        key: "getSpecificParcel",
+        key: 'getSpecificParcel',
         value: function getSpecificParcel(req, res) {
             var parcelId = req.params.id;
-            var findParcel = _databaseConfig2.default.find(function (parcel) {
+            var findParcel = _parceldb2.default.find(function (parcel) {
                 return parcel.id == parcelId;
             });
             if (findParcel) {
@@ -79,18 +87,39 @@ var parcelController = function () {
                 });
             }
         }
+        // this is to update a parcel order status
+
+    }, {
+        key: 'updateParcelStatus',
+        value: function updateParcelStatus(req, res) {
+            var parcelId = req.params.id;
+            var findParcel = _parceldb2.default.find(function (parcel) {
+                return parcel.id == parcelId;
+            });
+            if (findParcel) {
+                var newStatus = req.body.newStatus;
+                res.status(200).json({
+                    message: "parcel updated successfully"
+                });
+                return findParcel.status = newStatus;
+            } else {
+                return res.status(400).json({
+                    message: "could not update parcel order"
+                });
+            }
+        }
 
         // this is to delete a specific parcel
 
     }, {
-        key: "deleteSpecificParcel",
+        key: 'deleteSpecificParcel',
         value: function deleteSpecificParcel(req, res) {
             var parcelId = req.params.id;
-            var findParcel = _databaseConfig2.default.find(function (parcel) {
+            var findParcel = _parceldb2.default.find(function (parcel) {
                 return parcel.id == parcelId;
             });
             if (findParcel) {
-                var allCurrentParcels = _databaseConfig2.default.filter(function (parcel) {
+                var allCurrentParcels = _parceldb2.default.filter(function (parcel) {
                     return parcel !== findParcel;
                 });
                 res.status(200).json({
@@ -109,3 +138,4 @@ var parcelController = function () {
 }();
 
 exports.default = parcelController;
+//# sourceMappingURL=parcelControllers.js.map
