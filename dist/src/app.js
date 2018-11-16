@@ -26,7 +26,7 @@ var app = (0, _express2.default)();
 app.use(_bodyParser2.default.urlencoded({ extended: true }));
 app.use(_bodyParser2.default.json());
 app.use((0, _morgan2.default)("dev"));
-var PORT = process.env.port || 4000;
+var PORT = process.env.PORT || 4000;
 
 app.use('/api/v1/', _route2.default);
 // catching an error before passing it to the erro handler

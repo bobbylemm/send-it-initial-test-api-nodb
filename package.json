@@ -8,23 +8,33 @@
     "clean-routes": "cd dist && rm -rf routes",
     "clean-test": "cd dist && rm -rf test",
     "build-test": "npm run clean-test && cd dist && mkdir test && babel .././test/**.test.js -s -d test",
-    "build": "npm run clean && mkdir dist && babel src/app.js database/**.js controllers/**.js helpers/**.js -s -d dist && npm run build-routes && npm run build-test",
+    "build": "npm run clean && mkdir dist && babel src/app.js database/**.js controllers/**.js helpers/**.js middlewares/**.js dataMigrations/**.js config/**.js dbManager/**.js  -s -d dist && npm run build-routes && npm run build-test",
     "build-routes": "npm run clean-routes && cd dist && mkdir routes && babel .././routes/route.js -s -d routes",
     "test": "nyc --require babel-core/register mocha test/test.test.js --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "start": "nodemon bin/dev",
-    "production": "npm run build && nodemon bin/production"
+    "production": "npm run build && nodemon bin/production",
+    "db_migrations": " babel-node dataMigrations/createalldb.js --exit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
-    "express": "^4.16.4"
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
+    "find-process": "^1.2.0",
+    "jsonwebtoken": "^8.3.0",
+    "pg": "^7.6.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-register": "^6.26.0",

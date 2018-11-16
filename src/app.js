@@ -7,7 +7,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 app.use(morgan("dev"));
-const PORT = process.env.port || 4000;
+const PORT = process.env.PORT || 4000;
+
 
 app.use('/api/v1/', routes);
 // catching an error before passing it to the erro handler
@@ -25,6 +26,7 @@ app.use((err, req, res, next) => {
         }
     })
 })
+
 
 app.listen(PORT, () => {
     console.log(`Express app running on port ${PORT}`)

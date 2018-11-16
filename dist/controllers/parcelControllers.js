@@ -14,9 +14,24 @@ var _usersdb = require('../database/usersdb');
 
 var _usersdb2 = _interopRequireDefault(_usersdb);
 
+var _findUsers = require('../helpers/findUsers');
+
+var _findUsers2 = _interopRequireDefault(_findUsers);
+
+var _parcelsManager = require('./parcelsManager');
+
+var _parcelsManager2 = _interopRequireDefault(_parcelsManager);
+
+var _dbManager = require('../dbManager/dbManager');
+
+var _dbManager2 = _interopRequireDefault(_dbManager);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var db = new _dbManager2.default();
+var parManager = new _parcelsManager2.default(db);
 
 var parcelController = function () {
     function parcelController() {
@@ -49,11 +64,10 @@ var parcelController = function () {
                 packageName: packageName,
                 destination: destination,
                 pickupLocation: pickupLocation,
-                price: price
+                price: price,
+                status: ""
             };
-            var currentUser = _usersdb2.default.find(function (user) {
-                return user.loggedIn == true;
-            });
+            var currentUser = _findUsers2.default.findUsers(_usersdb2.default, 'loggedIn', true);
             if (currentUser && newParcel) {
                 currentUser.parcels.push(newParcel);
                 _parceldb2.default.push(newParcel);
@@ -66,6 +80,26 @@ var parcelController = function () {
                 });
             }
         }
+        // this is to get a specific parcel form a specific user
+
+    }, {
+        key: 'getParcelByUser',
+        value: function getParcelByUser(req, res) {
+            var userId = req.body.uId;
+            parManager.getAllUsersParcelOrder(userId, function (err, res) {
+                var allUsersParcels = res;
+                if (err) {
+                    return res.status(400).json({
+                        message: 'there was an error in trying to retrieve users parcels'
+                    });
+                } else {
+                    return res.status(200).json({
+                        message: 'successfully fetched all user parcel',
+                        parcels: res
+                    });
+                }
+            });
+        }
 
         // this is to get a specific parcel
 
@@ -73,19 +107,17 @@ var parcelController = function () {
         key: 'getSpecificParcel',
         value: function getSpecificParcel(req, res) {
             var parcelId = req.params.id;
-            var findParcel = _parceldb2.default.find(function (parcel) {
-                return parcel.id == parcelId;
-            });
-            if (findParcel) {
-                return res.status(200).json({
-                    message: "the parcel was found",
-                    parcel: findParcel
-                });
-            } else {
-                return res.status(400).json({
-                    message: "sorry the parcel was not found"
-                });
-            }
+            // const findParcel = helper.findUsers(allParcels, 'id', parcelId);
+            // if (findParcel) {
+            //     return res.status(200).json({
+            //         message: "the parcel was found",
+            //         parcel: findParcel
+            //     })
+            // }else {
+            //     return res.status(400).json({
+            //         message: "sorry the parcel was not found"
+            //     })
+            // }
         }
         // this is to update a parcel order status
 
@@ -93,9 +125,7 @@ var parcelController = function () {
         key: 'updateParcelStatus',
         value: function updateParcelStatus(req, res) {
             var parcelId = req.params.id;
-            var findParcel = _parceldb2.default.find(function (parcel) {
-                return parcel.id == parcelId;
-            });
+            var findParcel = _findUsers2.default.findUsers(_parceldb2.default, 'id', parcelId);
             if (findParcel) {
                 var newStatus = req.body.newStatus;
                 res.status(200).json({
@@ -115,9 +145,7 @@ var parcelController = function () {
         key: 'deleteSpecificParcel',
         value: function deleteSpecificParcel(req, res) {
             var parcelId = req.params.id;
-            var findParcel = _parceldb2.default.find(function (parcel) {
-                return parcel.id == parcelId;
-            });
+            var findParcel = _findUsers2.default.findUsers(_parceldb2.default, 'id', parcelId);
             if (findParcel) {
                 var allCurrentParcels = _parceldb2.default.filter(function (parcel) {
                     return parcel !== findParcel;

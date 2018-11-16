@@ -1,27 +1,22 @@
 import allUsers from '../database/usersdb';
 import helper from '../helpers/findUsers';
+import userrManager from './userManager';
+
 
 class usersControllers {
-    static registerUser (req, res) {
-        let userEmail = req.body.email, userName = req.body.username, password = req.body.password;
-        let newId = allUsers[allUsers.length - 1].id + 1;
-        const checkUser = helper.findUsers(allUsers, 'email', userEmail);
-        if (!checkUser) {
-            let newUser = {
-                id: newId,
-                email: userEmail,
-                username: userName,
-                password: password,
-                parcels: []
-            };
-            allUsers.push(newUser);
-            return res.status(200).json({
-                message: "you have been successfully registered"
+    static async registerUser (req, res) {
+       const { username, email, password } = req.body;
+        try {
+            const resp = userrManager.registerUser(username, email, password);
+            res.status(200).json({
+                message: "new user created",
             })
-        }else {
-            return res.status(400).json({
-                message: "you are already registered"
+            console.log(resp);
+        }catch(e) {
+            res.status(400).json({
+                message: 'unable to create user',
             })
+            console.log(e);
         }
     }
     // this is to login a user
@@ -41,16 +36,21 @@ class usersControllers {
         }
     }
     // this is to get all parcels created by a user
-    static getAllParcelsByUser (req, res) {
-        let userId = req.params.id;
-        const findUser = helper.findUsers(allUsers, 'id', userId);
-        if (findUser) {
-            res.json({
-                user: findUser
-            })
-        }else {
-            res.json({
-                error: "there is an error"
+    static async getAllParcelsByUser (req, res) {
+        const { uid } = req.params;
+        try {
+            const response = await userrManager.getAllUsersParcelOrder(uid);
+            console.log('response',response);
+            return res.status(200).json({
+                message: 'successfully got all user parcels',
+                respon: response.rows,
+                totalNumOfParcels: response.rowCount
+            })     
+        }catch(e) {
+            console.log(e);
+            return res.status(400).json({
+                message: 'could not get parcels',
+                e
             })
         }
     }
@@ -59,6 +59,23 @@ class usersControllers {
         return res.json({
             allUsers: allUsers
         })
+    }
+    // this is to change the destination of a parcel order
+    static async updateParcelDestination (req, res) {
+        const { newdestination } = req.body;
+        const { pid, uid } = req.params;
+        try {
+            let response = await userrManager.changeParcelDestination(newdestination, pid, uid);
+            console.log(response);
+            return res.status(200).json({
+                message: "parcel destination was updated successfully"
+            })
+        }catch(e) {
+            console.log(e);
+            return res.status(400).json({
+                message: "this parcel destination was not updated successfully",
+            })
+        }
     }
 }
 
