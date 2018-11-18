@@ -1,9 +1,9 @@
 import db from '../dbManager/dbManager';
 
 class ParcelManager {
-    static async addNewParcel(packageName, destination, pickupLocation, price, userId, userName) {
+    static async addNewParcel(packageName, pickupLocation, dropOfflocation, presentLocation, weight, price, initialStatus, userId) {
         try {
-            let resp = await db.insertNewParcel(packageName, destination, pickupLocation, price, userId, userName);
+            let resp = await db.insertNewParcel(packageName, pickupLocation, dropOfflocation, presentLocation, weight, price, initialStatus, userId);
             console.log(resp)
         }catch(e) {
             console.log(e)
@@ -16,6 +16,24 @@ class ParcelManager {
             console.log(res)
         }catch(e) {
             console.log(e)
+        }
+    }
+    // this is to change the parcel delivery status and this route should be accessible to the admin only
+    static async updateParcelStatus(newStatus, parcelId) {
+        try {
+            let res = await db.updateParcelStatus(newStatus, parcelId);
+            return res;
+        }catch(e) {
+            return e;
+        }
+    }
+    // this is to change the parcel delivery status and this route should be accessible to the admin only
+    static async updateParcelPresentlocation(newLocation, parcelId) {
+        try {
+            let res = await db.updateParcelslocation(newLocation, parcelId);
+            return res;
+        }catch(e) {
+            return e;
         }
     }
     // this is to get all parcels created by a specific user

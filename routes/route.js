@@ -6,16 +6,19 @@ import middlewares from '../middlewares/index';
 const router = express.Router();
 // this is the route to get all parcels
 // GET ALL PARCELS
-router.get('/parcels', parcelController.getAllParcels)
+router.get('/parcels', middlewares.validateToken, middlewares.validateAdmin, parcelController.getAllParcels)
 // this is the route for creating parcels
 // CREATE PARCELS
-router.post('/parcels',middlewares.validateParcels, parcelController.createNewParcel)
+router.post('/parcels', middlewares.validateToken, middlewares.validateParcels, parcelController.createNewParcel)
 // this is the route to get a specific parcel
 // GET A SPECIFIC PARCEL
 router.get('/parcels/:id', parcelController.getSpecificParcel)
 // this is to update the status of an existing parcel order
 // PUT A STATUS UPDATE
-router.put('/parcels/status/:id', parcelController.updateParcelStatus)
+router.put('/parcels/:pid/status', middlewares.validateParcelStatusUpdate, middlewares.validateToken, middlewares.validateAdmin, parcelController.updateParcelStatus)
+// this is to update the presentlocation of an existing parcel order
+// PUT A PRESENT LOCATION UPDATE
+router.put('/parcels/:pid/presentlocation', middlewares.validateLocationUpdate, middlewares.validateToken, middlewares.validateAdmin, parcelController.updateParcelPresentLocation)
 // this is to delete a specific parcel
 // DELETE A SPECIFIC ROUTE
 router.delete('/parcels/:id/delete', parcelController.deleteSpecificParcel)

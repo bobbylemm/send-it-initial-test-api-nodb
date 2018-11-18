@@ -26,6 +26,7 @@
     "express": "^4.16.4",
     "find-process": "^1.2.0",
     "jsonwebtoken": "^8.3.0",
+    "nodemailer": "^4.6.8",
     "pg": "^7.6.1"
   },
   "devDependencies": {

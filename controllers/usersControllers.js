@@ -1,37 +1,67 @@
+import jwt from 'jsonwebtoken';
 import allUsers from '../database/usersdb';
 import helper from '../helpers/findUsers';
 import userrManager from './userManager';
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 class usersControllers {
     static async registerUser (req, res) {
-       const { username, email, password } = req.body;
+       const { userName, Email, password } = req.body;
         try {
-            const resp = userrManager.registerUser(username, email, password);
-            res.status(200).json({
-                message: "new user created",
+            const response = await userrManager.registerUser(userName, Email, password);
+            console.log('user controller reponse', response.rows[0]);  
+            if (response.status !== 400) {
+                const { user_id, email, username } = response.rows[0]; 
+                const user = {user_id, email, username};
+                return jwt.sign({user}, process.env.SECRET_KEY, (err, token) => {
+                    if (err) {
+                    return console.log(err)
+                    }else {
+                    return res.header('x-auth-token', token).status(200).json({
+                        message: "successfully registered user",
+                        token
+                    })
+                   }
+                });
+            }
+            return res.status(401).json({
+                message: 'unable to register user'
             })
-            console.log(resp);
-        }catch(e) {
-            res.status(400).json({
+        }catch(error) {
+            res.status(401).json({
                 message: 'unable to create user',
             })
-            console.log(e);
+            console.log('user controller error', error);
         }
     }
     // this is to login a user
-    static login (req, res) {
-        let userEmail = req.body.email, password = req.body.password;
-        const findUser = helper.findUsers(allUsers, 'email', userEmail);
-        if (findUser) {
-            findUser.loggedIn = true;
-            return res.status(200).json({
-                message: "successfully logged in",
-                currentUser: findUser
+    static async login (req, res) {
+        const { Email, password } = req.body;
+        try {
+            const response = await userrManager.loginUser(Email, password);
+            console.log('LOGIN CONTROLLER response', response);
+            if (response.rows[0] !== undefined) {
+                const { user_id, email, username } = response.rows[0]; 
+                const user = {user_id, email, username};
+                return jwt.sign({user}, process.env.SECRET_KEY, (err, token) => {
+                    if (err) {
+                    return console.log(err)
+                    }else {
+                    return res.header('x-auth-token', token).status(200).json({
+                        message: "successfully logged in",
+                        token
+                    })
+                   }
+                });
+            }
+            return res.status(401).json({
+                message: 'there was an error logging in'
             })
-        }else {
-            return res.status(400).json({
-                message: "error logging in"
+        }catch (e) {
+            res.status(401).json({
+                message: 'error logging in'
             })
         }
     }

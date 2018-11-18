@@ -7,7 +7,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 app.use(morgan("dev"));
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4001;
 
 
 app.use('/api/v1/', routes);
