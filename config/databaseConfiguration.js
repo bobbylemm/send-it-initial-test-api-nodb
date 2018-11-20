@@ -12,7 +12,10 @@ let databaseConfig = {
         max: 10
     },
     "test": {
-        connectionString: process.env.DATABASE_URL_TEST
+        user: process.env.DATABASE_TEST_USER,
+        database: process.env.DATABASE_TEST_NAME,
+        password: process.env.DATABASE_TEST_PASSWORD,
+        port: '5432',
     },
     "production": {
         user: process.env.DATABASE_URL,

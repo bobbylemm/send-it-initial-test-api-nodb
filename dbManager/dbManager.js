@@ -9,14 +9,13 @@ class DbManager {
         let configString = '';
         if (process.env.NODE_ENV) {
         if(process.env.NODE_ENV.trim() == 'test') {
-        configString = config.test.connectionString;
+        configString = config.test;
         }
         if(process.env.NODE_ENV.trim() == 'development') {
          configString = config.development;
         }
     }
     this.pool = new Pool(configString);
-    console.log()
     this.createTables();
     }
     createTables() {
