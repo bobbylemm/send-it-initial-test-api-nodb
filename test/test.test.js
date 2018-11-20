@@ -11,9 +11,9 @@ chai.use(chaiHttp);
             .post('/api/v1/register')
             .set('content-type', 'application/json')
             .send({
-                Email: 'dodo@gmail.com',
-                userName: 'dodo',
-                password: 'dodosecret'
+                Email: 'bente@gmail.com',
+                userName: 'bente',
+                password: 'bentesecret'
             })
             .end((err, res) => {
                 expect(res.status).to.equal(200);

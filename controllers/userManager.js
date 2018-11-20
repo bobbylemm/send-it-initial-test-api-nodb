@@ -1,12 +1,11 @@
 
-
 class UserManager {
-    constructor(database) {
-        this.database = database;
+    constructor(db) {
+        this.db = db;
     }
     async registerUser(username, email, password) {
         try {
-            let res = await this.database.registerNewUser(username, email, password);
+            let res = await this.db.registerNewUser(username, email, password);
            return res;
         }catch(error) {
             console.log('user manager error', error)

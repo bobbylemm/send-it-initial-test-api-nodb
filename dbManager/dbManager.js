@@ -3,16 +3,6 @@ import dotenv from 'dotenv';
 import config from '../config/databaseConfiguration';
 
 dotenv.config();
-// const pool = new pg.Pool(config.development);
-// let configString;
-
-    // if(process.env.NODE_ENV.trim() == 'test') {
-    //     configString = config.test.connectionString;
-    // }
-    // if(process.env.NODE_ENV.trim() == 'development') {
-    //      configString = config.development;
-    // }
-const pool = new Pool(config.development);
 
 class DbManager {
     constructor() {
@@ -25,12 +15,12 @@ class DbManager {
          configString = config.development;
         }
     }
-    this.pool = new Pool(config.test.connectionString);
+    this.pool = new Pool(configString);
+    console.log()
     this.createTables();
     }
     createTables() {
     const usersTable = `
-    DROP TABLE IF EXISTS users CASCADE;
     CREATE TABLE IF NOT EXISTS users(
         user_id SERIAL NOT NULL PRIMARY KEY,
         username varchar(10) UNIQUE NOT NULL,
@@ -39,7 +29,6 @@ class DbManager {
         createdat TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
         const parcelsTable = `
-        DROP TABLE IF EXISTS parcels CASCADE;
         CREATE TABLE IF NOT EXISTS parcels(
             parcel_id SERIAL NOT NULL PRIMARY KEY,
             packagename varchar(10) NOT NULL,

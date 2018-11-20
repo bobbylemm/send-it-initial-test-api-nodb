@@ -3,18 +3,18 @@ import allUsers from '../database/usersdb';
 import helper from '../helpers/findUsers';
 import UserManager from './userManager';
 import dotenv from 'dotenv';
-import Db from '../dbManager/dbManager';
+import DbManger from '../dbManager/dbManager';
 
 dotenv.config();
-const database = new Db();
-let usermanager = new UserManager(database);
+const db = new DbManger();
+const usermanager = new UserManager(db);
 
 class usersControllers {
     static async registerUser (req, res) {
        const { userName, Email, password } = req.body;
         try {
             const response = await usermanager.registerUser(userName, Email, password);
-            console.log('user controller reponse', response.rows[0]);  
+            console.log('user controller reponse', response);  
             if (response.status !== 400) {
                 const { user_id, email, username } = response.rows[0]; 
                 const user = {user_id, email, username};
