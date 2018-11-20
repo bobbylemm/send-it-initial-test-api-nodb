@@ -1,19 +1,14 @@
 language: node_js
 node_js:
   - "7"
-  script:
-  - npm test
-
-  install:
-  - npm install
 
   postgres:
   adapter: postgresql
   database: myapp_test
   username: postgres
-before_script:
-  - "psql -c 'create database myapp_test;' -U postgres"
-  - "rake db:migrate"
+  before_script:
+    - "psql -c 'create database myapp_test;' -U postgres"
+    - "rake db:migrate"
 
 after_success:
 - npm run coverage
