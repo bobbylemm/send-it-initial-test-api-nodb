@@ -1,3 +1,3 @@
 module.exports = {
-    "extends": "airbnb-base"
-};es
+    "extends": "airbnb-base",
+};

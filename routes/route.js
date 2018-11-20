@@ -1,19 +1,40 @@
 import express from 'express';
-import parcelController from '../controllers/databaseController';
-import allParcels from '../database/databaseConfig';
+import parcelController from '../controllers/parcelControllers';
+import usersControllers from '../controllers/usersControllers';
+import middlewares from '../middlewares/index';
 
 const router = express.Router();
 // this is the route to get all parcels
 // GET ALL PARCELS
-router.get('/', parcelController.getAllParcels)
+router.get('/parcels', middlewares.validateToken, middlewares.validateAdmin, parcelController.getAllParcels)
 // this is the route for creating parcels
 // CREATE PARCELS
-router.post('/', parcelController.createNewParcel)
+router.post('/parcels', middlewares.validateToken, middlewares.validateParcels, parcelController.createNewParcel)
 // this is the route to get a specific parcel
 // GET A SPECIFIC PARCEL
-router.get('/:id', parcelController.getSpecificParcel)
+router.get('/parcels/:id', parcelController.getSpecificParcel)
+// this is to update the status of an existing parcel order
+// PUT A STATUS UPDATE
+router.put('/parcels/:pid/status', middlewares.validateParcelStatusUpdate, middlewares.validateToken, middlewares.validateAdmin, parcelController.updateParcelStatus)
+// this is to update the presentlocation of an existing parcel order
+// PUT A PRESENT LOCATION UPDATE
+router.put('/parcels/:pid/presentlocation', middlewares.validateLocationUpdate, middlewares.validateToken, middlewares.validateAdmin, parcelController.updateParcelPresentLocation)
 // this is to delete a specific parcel
 // DELETE A SPECIFIC ROUTE
-router.get('/delete/:id', parcelController.deleteSpecificParcel)
+router.delete('/parcels/:id/delete', parcelController.deleteSpecificParcel)
+
+// this is to get all users 
+// GET ALL USERS
+router.get('/users', usersControllers.getAllUsers)
+// fetch all parcels for a given user
+// GET ALL PARCELS FOR A GIVEN USER
+router.get('/users/:uid/parcels', usersControllers.getAllParcelsByUser)
+// this is to change the destination of a parcel order 
+router.post('/users/:pid/:uid', usersControllers.updateParcelDestination)
+// this to register a new user
+// POST A NEW USER
+router.post('/register',middlewares.validateRegister, usersControllers.registerUser)
+// this is to login in an existing user// 
+router.post('/login',middlewares.validateLogin, usersControllers.login)
 
 export default router;
