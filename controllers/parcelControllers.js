@@ -2,7 +2,8 @@ import allParcels from '../database/parceldb';
 import allUsers from '../database/usersdb';
 import helper from '../helpers/findUsers';
 import parcelManager from './parcelsManager';
-import helpers from '../helpers/handleError';
+import mailTransport from '../mailer/sendMaile';
+
 
 class parcelController {
     // this is to get all parcels
@@ -89,6 +90,8 @@ class parcelController {
         const { newStatus } = req.body;
         try {
             let response = parcelManager.updateParcelStatus(newStatus, parcelId);
+            // let mail = mailTransport.sendMail();
+            // mail.then(res => console.log('the response',res)).catch(err => console.log('the error',err));
             return res.status(200).json({
                 messsage: 'parcel status was updated successfully'
             })

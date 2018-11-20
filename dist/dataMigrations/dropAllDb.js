@@ -17,17 +17,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 _dotenv2.default.config();
 var pool = new _pg2.default.Pool(_databaseConfiguration2.default.development);
 
-var parcelsTable = 'DROP TABLE IF EXISTS parcels';
-var usersTable = 'DROP TABLE IF EXISTS users';
+var parcelsTable = 'DROP TABLE IF EXISTS users CASCADE;';
+var usersTable = 'DROP TABLE IF EXISTS parcels CASCADE;';
 
 pool.query(usersTable).then(function (res) {
-  return console.log(res);
-}).catch(function (err) {
-  return console.log(err);
+    return console.log(res);
 });
 pool.query(parcelsTable).then(function (res) {
-  return console.log(res);
+    return console.log(res);
 }).catch(function (err) {
-  return console.log(err);
+    return console.log(err);
+}).catch(function (err) {
+    return console.log(err);
 });
 //# sourceMappingURL=dropAllDb.js.map

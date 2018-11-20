@@ -22,12 +22,7 @@ var databaseConfig = {
         max: 10
     },
     "test": {
-        user: process.env.DATABASE_TEST_USER,
-        host: process.env.DATABASE_TEST_HOST,
-        port: '5432',
-        database: process.env.DATABASE_TEST_NAME,
-        password: process.env.DATABASE_TEST_PASSWORD,
-        max: 10
+        connectionString: process.env.DATABASE_URL_TEST
     },
     "production": {
         user: process.env.DATABASE_URL,

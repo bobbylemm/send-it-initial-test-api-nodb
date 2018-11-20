@@ -12,22 +12,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var validateRegister = function validateRegister(req, res, next) {
     var _req$body = req.body,
-        email = _req$body.email,
-        username = _req$body.username,
+        Email = _req$body.Email,
+        userName = _req$body.userName,
         password = _req$body.password;
 
     var emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(Email)) {
         return next(_handleError2.default.handleError('this email is not valid'));
-    } else if (!email) {
+    } else if (!Email) {
         return next(_handleError2.default.handleError('please fill in a valid email'));
     } else if (!password) {
         return next(_handleError2.default.handleError('please fill in a password'));
     } else if (password < 8) {
         return next(_handleError2.default.handleError('your password cannot be less than 8 characters'));
-    } else if (!username) {
+    } else if (!userName) {
         return next(_handleError2.default.handleError('please fill in a valid username'));
-    } else if (username < 5) {
+    } else if (userName < 5) {
         return next(_handleError2.default.handleError('your username cannot be less than 5 characters'));
     }
     return next();

@@ -1,46 +1,48 @@
-import db from '../dbManager/dbManager';
-import helpers from '../helpers/handleError';
+
 
 class UserManager {
-    static async registerUser(username, email, password) {
+    constructor(database) {
+        this.database = database;
+    }
+    async registerUser(username, email, password) {
         try {
-            let res = await db.registerNewUser(username, email, password);
+            let res = await this.database.registerNewUser(username, email, password);
            return res;
         }catch(error) {
             console.log('user manager error', error)
         }
     }
     // this is to login a user
-    static async loginUser(email, password) {
+    async loginUser(email, password) {
         try {
-            let res = await db.loginExistingUser(email, password);
+            let res = await this.database.loginExistingUser(email, password);
             return res;
         }catch(e) {
             return e;
         }
     }
     // this is to check for a user
-    static async checkUser(email) {
+    async checkUser(email) {
         try {
-            let response = await db.selectUserId(email);
+            let response = await this.database.selectUserId(email);
             return response;
         }catch(e) {
             return e;
         }
     }
     // this is to get all parcels
-    static async getAllParcels() {
+    async getAllParcels() {
         try {
-            let res = await db.getAllParcels();
+            let res = await this.database.getAllParcels();
             console.log(res)
         }catch(e) {
             console.log(e)
         }
     }
     // this is to get all parcels created by a specific user
-    static async getAllUsersParcelOrder(userId) {
+    async getAllUsersParcelOrder(userId) {
         try {
-            const res = await db.getAllUserParcels(userId);
+            const res = await this.database.getAllUserParcels(userId);
             // console.log('res',res);
             return res;
         }catch(e) {
@@ -49,9 +51,9 @@ class UserManager {
         }
     }
     // this is to change the destination of a parcel order
-    static async changeParcelDestination(newdestination, parcelId, userId) {
+    async changeParcelDestination(newdestination, parcelId, userId) {
         try {
-            let res = await db.updateParcelDestination(newdestination, parcelId, userId);
+            let res = await this.database.updateParcelDestination(newdestination, parcelId, userId);
             console.log(res);
         }catch(e) {
             console.log(e)

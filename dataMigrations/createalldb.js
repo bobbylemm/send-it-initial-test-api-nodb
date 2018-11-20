@@ -33,10 +33,10 @@ CREATE TABLE IF NOT EXISTS parcels(
 
 
 pool.query(usersTable)
-    .then(res => console.log(res));
-        pool.query(parcelsTable)
-        .then(res => console.log(res))
-    .catch(err => console.log(err))
+    .then(res => console.log(res))
+    //     pool.query(parcelsTable)
+    //     .then(res => console.log(res))
+    // .catch(err => console.log(err))
 .catch(err => console.log(err));
 
 

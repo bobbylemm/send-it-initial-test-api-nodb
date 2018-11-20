@@ -1,16 +1,19 @@
 import jwt from 'jsonwebtoken';
 import allUsers from '../database/usersdb';
 import helper from '../helpers/findUsers';
-import userrManager from './userManager';
+import UserManager from './userManager';
 import dotenv from 'dotenv';
+import Db from '../dbManager/dbManager';
 
 dotenv.config();
+const database = new Db();
+let usermanager = new UserManager(database);
 
 class usersControllers {
     static async registerUser (req, res) {
        const { userName, Email, password } = req.body;
         try {
-            const response = await userrManager.registerUser(userName, Email, password);
+            const response = await usermanager.registerUser(userName, Email, password);
             console.log('user controller reponse', response.rows[0]);  
             if (response.status !== 400) {
                 const { user_id, email, username } = response.rows[0]; 
@@ -40,7 +43,7 @@ class usersControllers {
     static async login (req, res) {
         const { Email, password } = req.body;
         try {
-            const response = await userrManager.loginUser(Email, password);
+            const response = await usermanager.loginUser(Email, password);
             console.log('LOGIN CONTROLLER response', response);
             if (response.rows[0] !== undefined) {
                 const { user_id, email, username } = response.rows[0]; 
@@ -69,7 +72,7 @@ class usersControllers {
     static async getAllParcelsByUser (req, res) {
         const { uid } = req.params;
         try {
-            const response = await userrManager.getAllUsersParcelOrder(uid);
+            const response = await usermanager.getAllUsersParcelOrder(uid);
             console.log('response',response);
             return res.status(200).json({
                 message: 'successfully got all user parcels',
@@ -95,7 +98,7 @@ class usersControllers {
         const { newdestination } = req.body;
         const { pid, uid } = req.params;
         try {
-            let response = await userrManager.changeParcelDestination(newdestination, pid, uid);
+            let response = await usermanager.changeParcelDestination(newdestination, pid, uid);
             console.log(response);
             return res.status(200).json({
                 message: "parcel destination was updated successfully"

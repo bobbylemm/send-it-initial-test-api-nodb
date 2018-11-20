@@ -3,15 +3,27 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _handleError = require('../helpers/handleError');
+
+var _handleError2 = _interopRequireDefault(_handleError);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var validateLogin = function validateLogin(req, res, next) {
     var _req$body = req.body,
-        email = _req$body.email,
+        Email = _req$body.Email,
         password = _req$body.password;
 
-    if (!email || !password) {
-        return res.status(400).json({
-            message: 'please fill in your email and password'
-        });
+    var emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(Email)) {
+        return next(_handleError2.default.handleError('this email is not valid'));
+    }
+    if (!Email) {
+        return next(_handleError2.default.handleError('please fill in a valid email'));
+    }
+    if (!password) {
+        return next(_handleError2.default.handleError('please fill in a password'));
     }
     return next();
 };
