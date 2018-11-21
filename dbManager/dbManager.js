@@ -9,7 +9,7 @@ class DbManager {
         let configString = '';
         if (process.env.NODE_ENV) {
         if(process.env.NODE_ENV.trim() == 'test') {
-        configString = config.test;
+        configString = config.test.url;
         }
         if(process.env.NODE_ENV.trim() == 'development') {
          configString = config.development;
