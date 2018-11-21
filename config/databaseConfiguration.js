@@ -15,7 +15,9 @@ let databaseConfig = {
         user: process.env.DATABASE_TEST_USER,
         database: process.env.DATABASE_TEST_NAME,
         password: process.env.DATABASE_TEST_PASSWORD,
-        port: '5432',
+        port: '5432'
+    },
+    "test2": {
         url: process.env.DATABASE_TEST_URL
     },
     "production": {
